@@ -55,7 +55,8 @@ class WikiPath(markdown.inlinepatterns.Pattern):
         super().__init__(pattern, **kwargs)
         self.config = config
 
-    def handleMatch(self, m):
+    # TODO: This method is too complex (C901)
+    def handleMatch(self, m):  # noqa: max-complexity 11
         wiki_path = m.group("wikipath")
         absolute = False
         if wiki_path.startswith("/"):
@@ -110,7 +111,7 @@ class WikiPath(markdown.inlinepatterns.Pattern):
             if href and not href.endswith("/"):
                 href = href + "/"
         else:
-            if href.endswith("/"):
+            if href.endswith("/") and len(href) > 1:
                 href = href[:-1]
 
         a = etree.Element("a")
